@@ -1,0 +1,44 @@
+[
+  {
+    "objectID": "index.html#overview",
+    "href": "index.html#overview",
+    "title": "Lotka–Volterra’s Predator–Prey Model",
+    "section": "Overview",
+    "text": "Overview\nThis document focuses on demonstrating the Lotka–Volterra’s model, originally developed by Alfred J. Lotka (1925) and Vito Volterra (1926), to describe the dynamics of biological systems where two species interact: one as a predator and the other as prey. The model consists of a pair of first-order, nonlinear differential equations commonly used to represent predator-prey interactions in ecological systems.\n\\[\n\\begin{aligned}\n\\frac{dx}{dt} & = \\alpha x - \\beta xy \\\\\n\\frac{dy}{dt} & = - \\gamma y + \\delta xy\n\\end{aligned}\n\\]"
+  },
+  {
+    "objectID": "index.html#setting-up-the-environment",
+    "href": "index.html#setting-up-the-environment",
+    "title": "Lotka–Volterra’s Predator–Prey Model",
+    "section": "Setting up the environment",
+    "text": "Setting up the environment\n\nCodelibrary(checkmate, quietly = TRUE)\nlibrary(deSolve, quietly = TRUE)\nlibrary(dplyr, quietly = TRUE)\nlibrary(ggplot2, quietly = TRUE)\nlibrary(latex2exp, quietly = TRUE)\nlibrary(magrittr, quietly = TRUE)"
+  },
+  {
+    "objectID": "index.html#numerical-solution-of-the-equations",
+    "href": "index.html#numerical-solution-of-the-equations",
+    "title": "Lotka–Volterra’s Predator–Prey Model",
+    "section": "Numerical solution of the equations",
+    "text": "Numerical solution of the equations\n\nCodelotka_volterra &lt;- function(\n    x = 0.9, \n    y = 1.8, \n    alpha = 2 / 3, \n    beta = 4 / 3, \n    gamma = 1, \n    delta = 1, \n    from = 0, \n    to = 100,\n    by = 0.01\n  ) {\n  checkmate::assert_number(x, lower = 0)\n  checkmate::assert_number(y, lower = 0)\n  checkmate::assert_number(alpha)\n  checkmate::assert_number(beta)\n  checkmate::assert_number(gamma)\n  checkmate::assert_number(delta)\n  checkmate::assert_number(from, lower = 0)\n  checkmate::assert_number(to, lower = from)\n  checkmate::assert_number(by, lower = 0)\n  \n  fun &lt;- function (t, y, parms) {\n    list2env(as.list(y), envir = environment())\n    list2env(as.list(parms), envir = environment())\n    \n    list(\n      c(\n        dx = (alpha * x) - (beta * x * y), # Prey\n        dp = (- gamma * y) + (delta * x * y) # Predator\n      )\n    )\n  }\n  \n  initial_values &lt;- c(x = x, y = y)\n  parameters &lt;- list(alpha = alpha, beta = beta, gamma = gamma, delta = delta)\n  time &lt;- seq(from = from, to = to, by = by)\n  \n  data &lt;- \n    deSolve::ode(\n      y = initial_values,\n      times = time, \n      func = fun,\n      parms = parameters\n    ) |&gt;\n    dplyr::as_tibble() |&gt;\n    dplyr::mutate(dplyr::across(dplyr::everything(), ~ as.numeric(.x)))\n  \n  list(\n    data = data,\n    initial_values = as.list(initial_values),\n    parameters = parameters\n  ) |&gt;\n  invisible()\n}\n\n\n\nCodelotka_volterra() |&gt; magrittr::extract2(\"data\")\n#&gt; # A tibble: 10,001 × 3\n#&gt;    time     x     y\n#&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;\n#&gt; 1  0    0.9    1.8 \n#&gt; 2  0.01 0.885  1.80\n#&gt; 3  0.02 0.869  1.80\n#&gt; 4  0.03 0.855  1.79\n#&gt; 5  0.04 0.840  1.79\n#&gt; 6  0.05 0.826  1.79\n#&gt; # ℹ 9,995 more rows"
+  },
+  {
+    "objectID": "index.html#plotting-population-dynamics",
+    "href": "index.html#plotting-population-dynamics",
+    "title": "Lotka–Volterra’s Predator–Prey Model",
+    "section": "Plotting population dynamics",
+    "text": "Plotting population dynamics\n\nCodeplot_pop_dynamics &lt;- function(\n    x = 0.9, \n    y = 1.8, \n    alpha = 2 / 3, \n    beta = 4 / 3, \n    gamma = 1, \n    delta = 1, \n    from = 0, \n    to = 100,\n    by = 0.01\n  ) {\n  checkmate::assert_number(x, lower = 0)\n  checkmate::assert_number(y, lower = 0)\n  checkmate::assert_number(alpha)\n  checkmate::assert_number(beta)\n  checkmate::assert_number(gamma)\n  checkmate::assert_number(delta)\n  checkmate::assert_number(from, lower = 0)\n  checkmate::assert_number(to, lower = from)\n  checkmate::assert_number(by, lower = 0)\n  \n  lotka_volterra(x, y, alpha, beta, gamma, delta, from, to, by) |&gt;\n    list2env(envir = environment())\n  \n  plot &lt;- \n    data |&gt;\n    ggplot2::ggplot(ggplot2::aes(x = time)) +\n    ggplot2::geom_line(\n      ggplot2::aes(y = x, color = \"Prey\"),\n      linewidth = 0.75\n    ) +\n    ggplot2::geom_line(\n      ggplot2::aes(y = y, color = \"Predator\"),\n      linetype = \"dashed\",\n      linewidth = 0.75\n    ) +\n    ggplot2::labs(\n      title = \"Lotka–Volterra's Model Dynamics\",\n      subtitle = latex2exp::TeX(\n        paste0(\n          \"$X_0$ = \", initial_values$x, \" | \",\n          \"$Y_0$ = \", initial_values$y, \" | \",\n          \"$\\\\alpha$ = \", round(parameters$alpha, 2), \" | \",\n          \"$\\\\beta$ = \", round(parameters$beta, 2), \" | \",\n          \"$\\\\gamma$ = \", round(parameters$gamma, 2), \" | \",\n          \"$\\\\delta$ = \", round(parameters$delta, 2)\n        ),\n      ),\n      x = \"Time\", \n      y = \"Population\",\n      color = ggplot2::element_blank()\n    ) +\n    ggplot2::scale_color_manual(\n      breaks = c(\"Prey\", \"Predator\"),\n      values = c(\"blue\", \"red\")\n    )\n  \n  print(plot)\n  \n  invisible()\n}\n\n\n\nCodeplot_pop_dynamics()"
+  },
+  {
+    "objectID": "index.html#phase-space-visualization",
+    "href": "index.html#phase-space-visualization",
+    "title": "Lotka–Volterra’s Predator–Prey Model",
+    "section": "Phase space visualization",
+    "text": "Phase space visualization\n\nCodegg_color_hue &lt;- function(n) {\n  hues = seq(15, 375, length = n + 1)\n  hcl(h = hues, l = 65, c = 100)[1:n]\n}\n\n\n\nCodeplot_phase_space &lt;- function(\n    x = 0.9, \n    y = 1:5,\n    alpha = 2 / 3, \n    beta = 4 / 3, \n    gamma = 1, \n    delta = 1, \n    from = 0, \n    to = 100,\n    by = 0.01\n) {\n  checkmate::assert_number(x, lower = 0)\n  checkmate::assert_numeric(y, lower = 0)\n  checkmate::assert_number(alpha)\n  checkmate::assert_number(beta)\n  checkmate::assert_number(gamma)\n  checkmate::assert_number(delta)\n  checkmate::assert_number(from, lower = 0)\n  checkmate::assert_number(to, lower = from)\n  checkmate::assert_number(by, lower = 0)\n\n  colors &lt;- gg_color_hue(length(y))\n  plot &lt;-ggplot2::ggplot()\n  \n  for (i in seq_along(y)) {\n    data_i &lt;- \n      lotka_volterra(x, y[i], alpha, beta, gamma, delta, from, to, by) |&gt;\n      magrittr::extract2(\"data\") |&gt;\n      dplyr::mutate(color = as.character(i))\n    \n    plot &lt;-\n      plot +\n      ggplot2::geom_path(\n        data = data_i,\n        ggplot2::aes(x = x, y = y, color = color),\n        linewidth = 1\n      )\n  }\n  \n  colors &lt;- gg_color_hue(length(y))\n  names(colors) &lt;- seq_along(y) |&gt; as.character()\n  \n  plot &lt;-\n    plot +\n    ggplot2::labs(\n      title = \"Lotka–Volterra's Model Phase-Space\",\n      subtitle = latex2exp::TeX(\n        paste0(\n          \"$X_0$ = \", x, \" | \",\n          \"$\\\\alpha$ = \", round(alpha, 2), \" | \",\n          \"$\\\\beta$ = \", round(beta, 2), \" | \",\n          \"$\\\\gamma$ = \", round(gamma, 2), \" | \",\n          \"$\\\\delta$ = \", round(delta, 2)\n        ),\n      ),\n      x = \"Prey\",\n      y = \"Predator\"\n    ) +\n    scale_color_manual(name = latex2exp::TeX(\"$Y_0$\"), values = colors)\n  \n  print(plot)\n  \n  invisible()\n}\n\n\n\nCodeplot_phase_space()"
+  },
+  {
+    "objectID": "index.html#references",
+    "href": "index.html#references",
+    "title": "Lotka–Volterra’s Predator–Prey Model",
+    "section": "References",
+    "text": "References\n\n\nLotka, A. J. (1925). Elements of physical biology. Williams & Wilkins Company. http://archive.org/details/elementsofphysic017171mbp\n\n\nVolterra, V. (1926). Fluctuations in the abundance of a species considered mathematically. Nature, 118(2972), 558–560. https://doi.org/10.1038/118558a0"
+  }
+]
