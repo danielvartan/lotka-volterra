@@ -12,7 +12,9 @@ source(here::here("R/quarto-setup.R"))
 
 ## Overview
 
-This document focuses on demonstrating the [Lotka–Volterra's model](https://en.wikipedia.org/wiki/Lotka%E2%80%93Volterra_equations), originally developed by Alfred J. Lotka [-@lotka1925] and Vito Volterra [-@volterra1926], to describe the dynamics of biological systems where two species interact: one as a predator and the other as prey. The model consists of a pair of first-order, nonlinear differential equations commonly used to represent predator-prey interactions in ecological systems.
+This document focuses on demonstrating the [Lotka–Volterra's model](https://en.wikipedia.org/wiki/Lotka%E2%80%93Volterra_equations), originally developed by Alfred J. Lotka [-@lotka1925] and Vito Volterra [-@volterra1926], to describe the dynamics of biological systems where two species interact: one as a predator and the other as prey.
+
+The dynamics of the model are represented by the following set of first-order, nonlinear differential equations:
 
 $$
 \begin{aligned}
@@ -20,6 +22,12 @@ $$
 \frac{dy}{dt} & = - \gamma y + \delta xy
 \end{aligned}
 $$
+
+where:
+
+- $x$ and $y$ are the populations of the prey and predator, respectively;
+- $\alpha$ and $\delta$ are the prey per capita growth rate and the effect of the presence of prey on the predator's growth rate, respectively;
+- $\beta$ and $\gamma$ are the effect of the presence of predators on the prey death rate and predator's per capita death rate, respectively.
 
 ## Setting up the environment
 
@@ -138,7 +146,7 @@ plot_pop_dynamics <- function(
       linewidth = 0.75
     ) +
     ggplot2::labs(
-      title = "Lotka–Volterra's Model Dynamics",
+      title = "Lotka–Volterra's Model Population Dynamics",
       subtitle = latex2exp::TeX(
         paste0(
           "$X_0$ = ", initial_values$x, " | ",
@@ -199,12 +207,11 @@ plot_phase_space <- function(
   checkmate::assert_number(to, lower = from)
   checkmate::assert_number(by, lower = 0)
 
-  colors <- gg_color_hue(length(y))
   plot <-ggplot2::ggplot()
   
-  for (i in seq_along(y)) {
+  for (i in y) {
     data_i <- 
-      lotka_volterra(x, y[i], alpha, beta, gamma, delta, from, to, by) |>
+      lotka_volterra(x, i, alpha, beta, gamma, delta, from, to, by) |>
       magrittr::extract2("data") |>
       dplyr::mutate(color = as.character(i))
     
@@ -213,12 +220,12 @@ plot_phase_space <- function(
       ggplot2::geom_path(
         data = data_i,
         ggplot2::aes(x = x, y = y, color = color),
-        linewidth = 1
+        linewidth = 0.75
       )
   }
   
   colors <- gg_color_hue(length(y))
-  names(colors) <- seq_along(y) |> as.character()
+  names(colors) <- as.character(y)
   
   plot <-
     plot +
