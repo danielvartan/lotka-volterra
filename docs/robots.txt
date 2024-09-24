@@ -1,1 +1,1 @@
-Sitemap: https://danielvartan.github.io/lotka–volterra/sitemap.xml
+Sitemap: https://danielvartan.github.io/lotka-volterra/sitemap.xml

@@ -12,7 +12,7 @@ source(here::here("R/quarto-setup.R"))
 
 ## Overview
 
-This document focuses on demonstrating the [Lotka–Volterra's model](https://en.wikipedia.org/wiki/Lotka%E2%80%93Volterra_equations), originally developed by Alfred J. Lotka [-@lotka1925] and Vito Volterra [-@volterra1926], to describe the dynamics of biological systems where two species interact: one as a predator and the other as prey.
+This document focuses on demonstrating the [Lotka-Volterra's model](https://en.wikipedia.org/wiki/Lotka%E2%80%93Volterra_equations), originally developed by Alfred J. Lotka [-@lotka1925] and Vito Volterra [-@volterra1926], to describe the dynamics of biological systems where two species interact: one as a predator and the other as prey.
 
 The dynamics of the model are represented by the following set of first-order, nonlinear differential equations:
 
@@ -146,7 +146,7 @@ plot_pop_dynamics <- function(
       linewidth = 0.75
     ) +
     ggplot2::labs(
-      title = "Lotka–Volterra's Model Population Dynamics",
+      title = "Lotka-Volterra's Model Population Dynamics",
       subtitle = latex2exp::TeX(
         paste0(
           "$X_0$ = ", initial_values$x, " | ",
@@ -230,7 +230,7 @@ plot_phase_space <- function(
   plot <-
     plot +
     ggplot2::labs(
-      title = "Lotka–Volterra's Model Phase-Space",
+      title = "Lotka-Volterra's Model Phase-Space",
       subtitle = latex2exp::TeX(
         paste0(
           "$X_0$ = ", x, " | ",

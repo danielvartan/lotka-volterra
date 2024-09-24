@@ -9,7 +9,7 @@ project:
   output-dir: docs
   render: [index.qmd]
 
-title: "Lotka–Volterra's Predator–Prey Model"
+title: "Lotka-Volterra's Predator–Prey Model"
 author: "Daniel Vartanian"
   # name: "Daniel Vartanian"
   # orcid: 0000-0001-7782-759X
@@ -21,7 +21,7 @@ author: "Daniel Vartanian"
   #   - Country: Brazil
   #   - url: https://www.usp.br
 keyword: >
-  lotka–volterra model, predator-prey dynamics,
+  lotka-volterra model, predator-prey dynamics,
   nonlinear differential equations, population modeling. ecological modeling,
   r programming. numerical simulations, ordinary differential equations,
   dynamical systems
@@ -29,9 +29,9 @@ date: today
 date-format: "YYYY-MM-DD"
 
 website:
-  repo-url: https://github.com/danielvartan/lotka–volterra/
-  site-url: https://danielvartan.github.io/lotka–volterra/
-  issue-url: https://github.com/danielvartan/lotka–volterra/issues/
+  repo-url: https://github.com/danielvartan/lotka-volterra/
+  site-url: https://danielvartan.github.io/lotka-volterra/
+  issue-url: https://github.com/danielvartan/lotka-volterra/issues/
   repo-branch: main
   repo-actions: [edit, issue]
   search: false
@@ -40,7 +40,7 @@ website:
     background: dark
     left:
       - icon: github
-        href: https://github.com/danielvartan/lotka–volterra
+        href: https://github.com/danielvartan/lotka-volterra
         aria-label: GitHub
 
 format:
