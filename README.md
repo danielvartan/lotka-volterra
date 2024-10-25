@@ -7,6 +7,6 @@
 
 🐇🐐🦙🦆🦌🐿️🐔🐠🦊🐅🐺🦁🦅🐍🐊🔁⚖️🔗🌍
 
-This repository contains a representation of the [Lotka-Volterra's model](https://en.wikipedia.org/wiki/Lotka%E2%80%93Volterra_equations), originally developed by Alfred J. Lotka ([1925](http://archive.org/details/elementsofphysic017171mbp)) and Vito Volterra ([1926](https://www.nature.com/articles/118558a0)), to describe the dynamics of biological systems where two species interact: one as a predator and the other as prey.
+This repository contains a illustration of the [Lotka-Volterra's model](https://en.wikipedia.org/wiki/Lotka%E2%80%93Volterra_equations), originally developed by Alfred J. Lotka ([1925](http://archive.org/details/elementsofphysic017171mbp)) and Vito Volterra ([1926](https://www.nature.com/articles/118558a0)), to describe the dynamics of biological systems where two species interact: one as a predator and the other as prey.
 
 The report is available [here](https://danielvartan.github.io/lotka-volterra/).

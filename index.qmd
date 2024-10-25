@@ -12,7 +12,7 @@ source(here::here("R/quarto-setup.R"))
 
 ## Overview
 
-This document focuses on representing the [Lotka-Volterra's model](https://en.wikipedia.org/wiki/Lotka%E2%80%93Volterra_equations), originally developed by Alfred J. Lotka [-@lotka1925] and Vito Volterra [-@volterra1926], to describe the dynamics of biological systems where two species interact: one as a predator and the other as prey.
+This document focuses on illustrating the [Lotka-Volterra's model](https://en.wikipedia.org/wiki/Lotka%E2%80%93Volterra_equations), originally developed by Alfred J. Lotka [-@lotka1925] and Vito Volterra [-@volterra1926], to describe the dynamics of biological systems where two species interact: one as a predator and the other as prey.
 
 The dynamics of the model are represented by the following set of first-order, nonlinear differential equations:
 
